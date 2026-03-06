@@ -1,0 +1,36 @@
+name: grade_calculator_app
+description: Student Grade Calculator - Flutter Version
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI
+  cupertino_icons: ^1.0.8
+
+  # Excel export
+  excel: ^4.0.2
+
+  # PDF export
+  pdf: ^3.10.4
+  printing: ^5.11.0
+
+  # File handling
+  path_provider: ^2.1.2
+  path: ^1.9.0
+
+  # Download file in browser/Android
+  universal_html: ^2.2.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
