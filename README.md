@@ -1,10 +1,19 @@
-A sample command-line application with an entrypoint in `bin/`, library code
-in `lib/`, and example unit test in `test/`.
-
-
 # Student Grade Calculator
 
-A console application built with Dart that reads student scores from an Excel file, calculates the average and grade for each subject, and writes the results automatically into a second sheet.
+A complete student grade management system built with **Dart** and  **Flutter** .
+
+It runs as both a **console application** (with Excel) and a **Flutter GUI application** (web & Android).
+
+---
+
+## Author
+
+| Field                 | Details                     |
+| --------------------- | --------------------------- |
+| **Name**        | Kenmogne Matchuekam Sergine |
+| **Course**      | ICT                         |
+| **Year**        | 2024 / 2025                 |
+| **Institution** | ICT University              |
 
 ---
 
@@ -13,116 +22,206 @@ A console application built with Dart that reads student scores from an Excel fi
 ```
 grade_calculator/
 │
-├── pubspec.yaml
-├── pubspec.lock
 ├── bin/
-│    └── grade_calculator.dart
-├── students.xlsx
-└── test/
+│    └── grade_calculator.dart     ← Console version (reads/writes Excel)
+│
+├── lib/
+│    └── calculator.dart           ← Shared OOP logic
+│
+├── grade_calculator_app/          ← Flutter GUI version
+│    ├── lib/
+│    │    ├── calculator.dart      ← OOP logic (copy)
+│    │    └── main.dart            ← Flutter UI
+│    └── pubspec.yaml
+│
+├── students.xlsx                  ← Excel file with student scores
+├── pubspec.yaml
+└── README.md
 ```
 
 ---
 
-## How It Works
+## 🏗️ OOP Architecture
 
-1. Opens `students.xlsx`
-2. Reads all student scores from **Sheet 1 (Scores)**
-3. For each student and each subject, calculates the subject average using the formula:
-   ```
-   Average = (CA × 0.8) + (Exam × 0.6)
-   ```
-4. Assigns a grade to each subject average
-5. Writes all results automatically into **Sheet 2 (Grades)**
-6. Displays everything in the terminal
+The project uses full Object Oriented Programming as required:
 
----
+```
+abstract class Calculator          ← Interface (contract)
+        ↑
+class BaseCalculator               ← Parent class (shared logic)
+        ↑
+class GradeCalculator              ← Child class (student management)
+```
 
-## Grading Scale
+### Concepts used:
 
-| Average /20    | Grade |
-| -------------- | ----- |
-| 16.00 – 20.00 | A     |
-| 14.00 – 15.99 | B     |
-| 12.00 – 13.99 | C     |
-| 10.00 – 11.99 | D     |
-| 8.00  – 9.99  | E     |
-| 0.00  – 7.99  | F     |
+| Concept                              | Where                                                             |
+| ------------------------------------ | ----------------------------------------------------------------- |
+| **Abstract class / Interface** | `abstract class Calculator`                                     |
+| **Parent class**               | `class BaseCalculator implements Calculator`                    |
+| **Child class / Inheritance**  | `class GradeCalculator extends BaseCalculator`                  |
+| **Lambda**                     | `final formula = (double a, double b) => (a * 0.8) + (b * 0.6)` |
+| **Higher order function**      | Formula passed as a variable inside `calculate()`               |
+| **Collection operations**      | `.map()`,`.asMap()`,`.where()`,`.toList()`,`.fold()`    |
 
 ---
 
-## Excel File Structure
+## ⚙️ How It Works
 
-### Sheet 1 — Scores (filled manually)
+### Formula
 
-| Matricule | Name | Sur-Name | Sex | DOB | Class | Maths CA | Maths Exam | Geography CA | Geography Exam | ... |
-| --------- | ---- | -------- | --- | --- | ----- | -------- | ---------- | ------------ | -------------- | --- |
+```
+Subject Average = (CA × 0.8) + (Exam × 0.6)
+```
 
-* **CA** is marked out of **10**
-* **Exam** is marked out of **20**
-* Student data starts at **Row 5**
+| Component       | Max Score | Weight         | Max Contribution    |
+| --------------- | --------- | -------------- | ------------------- |
+| CA              | 10        | 40%            | 8 points            |
+| Exam            | 20        | 60%            | 12 points           |
+| **Total** |           | **100%** | **20 points** |
+
+### Grading Scale
+
+| Average /20    | Grade       |
+| -------------- | ----------- |
+| 16.00 – 20.00 | **A** |
+| 14.00 – 15.99 | **B** |
+| 12.00 – 13.99 | **C** |
+| 10.00 – 11.99 | **D** |
+| 8.00 – 9.99   | **E** |
+| 0.00 – 7.99   | **F** |
+
+---
+
+## 🖥️ Version 1 — Console Application
+
+Reads student scores from **Sheet 1 (Scores)** of the Excel file,
+
+calculates grades for each subject, and writes results to  **Sheet 2 (Grades)** .
+
+### Excel File Structure
+
+**Sheet 1 — Scores** (filled manually):
+
+| Matricule | Name | Sur-Name | Sex | DOB | Class | Maths CA | Maths Exam | ... |
+| --------- | ---- | -------- | --- | --- | ----- | -------- | ---------- | --- |
+
 * Subject names are in **Row 3**
+* Student data starts from **Row 5**
+* CA is out of  **10** , Exam is out of **20**
 
-### Sheet 2 — Grades (filled automatically by Dart)
+**Sheet 2 — Grades** (filled automatically):
 
-| Matricule | Name | Sur-Name | Sex | DOB | Class | Maths Avg | Maths Grade | Geography Avg | Geography Grade | ... |
-| --------- | ---- | -------- | --- | --- | ----- | --------- | ----------- | ------------- | --------------- | --- |
+| Matricule | Name | Sur-Name | Sex | DOB | Class | Maths Avg | Maths Grade | ... |
+| --------- | ---- | -------- | --- | --- | ----- | --------- | ----------- | --- |
 
-* Sheet 2 is **never filled manually**
-* Every run deletes old results and writes fresh ones
+### How to Run Console Version
 
----
-
-## Requirements
-
-| Requirement | Details                                         |
-| ----------- | ----------------------------------------------- |
-| Dart SDK    | Version 3.x or above                            |
-| VS Code     | With the Dart extension installed               |
-| Excel file  | `students.xlsx`must be in the project root    |
-| Internet    | Only needed the first time for `dart pub get` |
+```bash
+# Make sure students.xlsx is closed in Excel first!
+dart run
+```
 
 ---
 
-## Installation
+## 📱 Version 2 — Flutter GUI Application
 
-1. Clone or download the project folder
-2. Open the folder in **VS Code**
-3. Open the terminal and run:
+A beautiful dark blue mobile and web application that:
 
-   ```
-   dart pub get
-   ```
+* 📂 Imports any `students.xlsx` file
+* 📊 Calculates and displays grades per subject in beautiful cards
+* 💾 Exports results as  **Excel** ,  **PDF** , or **Word**
 
-   This downloads the `excel` package. Only needed once.
+### How to Run Flutter Version
+
+```bash
+cd grade_calculator_app
+
+# Run on Chrome (web)
+flutter run -d chrome
+
+# Run on Android phone (connect phone via USB first)
+flutter run -d android
+
+# Install packages first if needed
+flutter pub get
+```
+
+### Features
+
+| Feature            | Description                                        |
+| ------------------ | -------------------------------------------------- |
+| 📂 Import Excel    | Load any students.xlsx file                        |
+| 📊 Results table   | Beautiful card per student with all subject grades |
+| 📈 Export Excel    | Download grades as .xlsx file                      |
+| 📄 Export PDF      | Download grades as PDF                             |
+| 📝 Export Word     | Download grades as .doc file                       |
+| 🎨 Dark blue theme | Professional UI design                             |
 
 ---
 
-## How to Run
+## 🔧 Requirements
 
-1. **Close** `students.xlsx` in Excel before running
-2. Open the terminal in VS Code
-3. Run the program:
-   ```
-   dart run
-   ```
-4. When finished, open `students.xlsx` and check the **Grades** sheet
-
-> ⚠️ **Important:** Never open `students.xlsx` while the program is running. The file cannot be saved if it is open and all results will be lost.
+| Tool           | Version                               |
+| -------------- | ------------------------------------- |
+| Dart SDK       | 3.x or above                          |
+| Flutter SDK    | 3.x or above                          |
+| VS Code        | Latest with Dart & Flutter extensions |
+| Android Studio | For Android builds                    |
 
 ---
 
-## Dependencies
+## 📦 Dependencies
+
+### Console version (`pubspec.yaml`)
 
 ```yaml
 dependencies:
   excel: ^4.0.2
 ```
 
+### Flutter version (`grade_calculator_app/pubspec.yaml`)
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  excel: ^4.0.2
+  pdf: ^3.10.4
+  printing: ^5.11.0
+  path_provider: ^2.1.2
+  universal_html: ^2.2.4
+```
+
 ---
 
-## Author
+## 🚀 Installation
 
-* **Name:** Kenmogne Matchuekam Sergine
-* **Course:** ICT
-* **Year:** 2024 / 2025
-* **Institution:** ICT University
+```bash
+# Clone the repository
+git clone https://github.com/KENMOGNESERGINE/grade_calculator.git
+
+# Go into the project
+cd grade_calculator
+
+# Install console dependencies
+dart pub get
+
+# Install Flutter dependencies
+cd grade_calculator_app
+flutter pub get
+```
+
+---
+
+## 📌 Important Notes
+
+> ⚠️ Always **close** `students.xlsx` in Excel before running the console version.
+>
+> The file cannot be saved if it is open elsewhere.
+
+> ✅ The Flutter app works on **Web, Android, iOS and Desktop** from the same codebase.
+
+---
+
+*Generated for ICT University — Academic Year 2024/2025*
