@@ -6,16 +6,7 @@ It runs as both a **console application** (with Excel) and a **Flutter GUI appli
 
 ---
 
-## Author
 
-| Field                 | Details                     |
-| --------------------- | --------------------------- |
-| **Name**        | Kenmogne Matchuekam Sergine |
-| **Course**      | ICT                         |
-| **Year**        | 2024 / 2025                 |
-| **Institution** | ICT University              |
-
----
 
 ## Project Structure
 
